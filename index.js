@@ -1,54 +1,49 @@
-const _ = require('underscore')
-_.mixin(require('underscore.deep'))
+var _ = require('underscore');
+_.mixin(require('underscore.deep'));
 
-export default {
-    flatten(obj) {
+exports.default = {
+    flatten: function flatten(obj) {
         return _.deepToFlat(obj);
     },
-    deepen(obj) {
+    deepen: function deepen(obj) {
         return _.deepFromFlat(obj);
     },
-
-    subscribe(key, callback) {
-        const keys = key.split('.'),
+    subscribe: function subscribe(key, callback) {
+        var keys = key.split('.'),
             baseKey = keys.shift(),
             obj = this.getOrCreate(baseKey);
 
-        obj.meta.event = `localstorage/change/${baseKey}`;
-        localStorage.setItem(baseKey, JSON.stringify(obj));
+        obj.meta.event = 'localstorage/change/' + baseKey;
+        localStorage.setItem(baseKey, (0, _stringify2.default)(obj));
         $(document).on(obj.meta.event, callback);
     },
-    sendEvent(obj) {
+    sendEvent: function sendEvent(obj) {
         if (typeof obj.meta.event === 'undefined') {
             return;
         }
         $(document).trigger(obj.meta.event, obj);
     },
-
-    beforeSet(value) {
-        const obj = _.deepExtend({
+    beforeSet: function beforeSet(value) {
+        var obj = _.deepExtend({
             meta: {
                 created_at: Date.now(),
-                type: typeof value.data,
-            },
+                type: (0, _typeof3.default)(value.data)
+            }
         }, value);
 
         obj.meta.updated_at = Date.now();
-        return JSON.stringify(obj);
+        return (0, _stringify2.default)(obj);
     },
-
-    afterSet(obj) {
+    afterSet: function afterSet(obj) {
         this.sendEvent(obj);
     },
-
-    setKey(object, key, value) {
-        const obj = this.flatten(object);
+    setKey: function setKey(object, key, value) {
+        var obj = this.flatten(object);
         obj[key] = value;
         return this.deepen(obj);
     },
-
-    set(key, value) {
-        const keys = key.split('.'),
+    set: function set(key, value) {
+        var keys = key.split('.'),
             baseKey = keys.shift(),
             obj = this.getOrCreate(baseKey);
 
@@ -56,40 +51,39 @@ export default {
         localStorage.setItem(baseKey, this.beforeSet(obj));
         this.afterSet(obj);
     },
-
-    touch(key) {
-        const keys = key.split('.'),
+    touch: function touch(key) {
+        var keys = key.split('.'),
             baseKey = keys.shift(),
             obj = this.getOrCreate(baseKey);
 
         this.set(baseKey, obj.data);
     },
+    exists: function exists(key) {
+        var value = localStorage.getItem(key);
 
-    exists(key) {
-        const value = localStorage.getItem(key);
-
-        if (typeof value === 'object') {
+        if ((typeof value === 'undefined' ? 'undefined' : (0, _typeof3.default)(value)) === 'object') {
             return false;
         }
 
         return true;
     },
+    itterate: function itterate(callback) {
+        var keys = (0, _keys2.default)(localStorage);
+        var i = keys.length;
 
-    itterate(callback) {
-        const keys = Object.keys(localStorage);
-        let i = keys.length;
-
-        while ( i-- ) {
+        while (i--) {
             callback(keys[i]);
         }
     },
-
-    drilldown(obj, str) {
-        return str.split(".").reduce((o, x) => o[x], obj);
+    drilldown: function drilldown(obj, str) {
+        return str.split(".").reduce(function (o, x) {
+            return o[x];
+        }, obj);
     },
+    get: function get(key) {
+        var meta = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-    get(key, meta = false) {
-        const keys = key.split("."),
+        var keys = key.split("."),
             value = JSON.parse(localStorage.getItem(keys.shift()));
 
         if (!value) {
@@ -106,52 +100,44 @@ export default {
 
         return value.data;
     },
-
-    getOrCreate(key) {
+    getOrCreate: function getOrCreate(key) {
         if (this.exists(key)) {
             return this.get(key, true);
         }
 
         return {
-            data:{},
-            meta:{},
+            data: {},
+            meta: {}
         };
     },
-
-    getMeta(key) {
-        const keys = key.split(".");
-        let value = localStorage.getItem(keys.shift());
+    getMeta: function getMeta(key) {
+        var keys = key.split(".");
+        var value = localStorage.getItem(keys.shift());
         value = JSON.parse(value);
 
         return value.meta;
     },
+    getAll: function getAll() {
+        var _this = this;
 
-    getAll() {
-        const storage = {};
+        var storage = {};
 
-        this.itterate((key) => {
-            storage[key] = this.get(key);
+        this.itterate(function (key) {
+            storage[key] = _this.get(key);
         });
 
         return storage;
     },
-
-    delete(key) {
+    delete: function _delete(key) {
         localStorage.removeItem(key);
     },
+    deleteAll: function deleteAll() {
+        var _this2 = this;
 
-    deleteAll() {
-        this.itterate((key) => {
-            this.delete(key);
+        this.itterate(function (key) {
+            _this2.delete(key);
         });
     },
-
-    sync() {
-
-    },
-
-    push() {
-
-    },
-}
-
+    sync: function sync() {},
+    push: function push() {}
+};
