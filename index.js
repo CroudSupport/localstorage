@@ -1,7 +1,7 @@
 var _ = require('underscore');
 _.mixin(require('underscore.deep'));
 
-exports.default = {
+module.exports = {
     flatten: function flatten(obj) {
         return _.deepToFlat(obj);
     },
@@ -14,7 +14,7 @@ exports.default = {
             obj = this.getOrCreate(baseKey);
 
         obj.meta.event = 'localstorage/change/' + baseKey;
-        localStorage.setItem(baseKey, (0, _stringify2.default)(obj));
+        localStorage.setItem(baseKey, JSON.stringify(obj));
         $(document).on(obj.meta.event, callback);
     },
     sendEvent: function sendEvent(obj) {
@@ -27,12 +27,12 @@ exports.default = {
         var obj = _.deepExtend({
             meta: {
                 created_at: Date.now(),
-                type: (0, _typeof3.default)(value.data)
+                type: typeof value.data,
             }
         }, value);
 
         obj.meta.updated_at = Date.now();
-        return (0, _stringify2.default)(obj);
+        return JSON.stringify(obj);
     },
     afterSet: function afterSet(obj) {
         this.sendEvent(obj);
@@ -61,14 +61,14 @@ exports.default = {
     exists: function exists(key) {
         var value = localStorage.getItem(key);
 
-        if ((typeof value === 'undefined' ? 'undefined' : (0, _typeof3.default)(value)) === 'object') {
+        if (typeof value === 'undefined') {
             return false;
         }
 
         return true;
     },
     itterate: function itterate(callback) {
-        var keys = (0, _keys2.default)(localStorage);
+        var keys = {};
         var i = keys.length;
 
         while (i--) {
