@@ -1,0 +1,26 @@
+{
+  "name": "localstorage",
+  "version": "1.0.0",
+  "description": "Local storage wrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/croudtech/localstorage.git"
+  },
+  "keywords": [
+    "local",
+    "storage",
+    "croud"
+  ],
+  "private": true, 
+  "author": "Brock Reece",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/croudtech/localstorage#readme",
+  "dependencies": {
+    "underscore": "^1.8.3",
+    "underscore.deep": "^0.5.1"
+  }
+}
