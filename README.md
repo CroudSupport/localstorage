@@ -46,7 +46,12 @@ To recall data, you can use the get function
 store.get('test.b') //{c: 'multi-dimensional'}
 ```
 
-Pass a true bool to receive structured meta data, ie created + updated timestamps, type, etc
+Pass a true bool to receive structured meta data, including: 
+
+* Created timestamp
+* Updated timestamp 
+* Namespaced event
+* Stored data type
 
 ```
 #!js
@@ -65,7 +70,7 @@ store.subscribe('test', (e, obj) => {
   console.log(obj);
 });
 
-store.set('test.b.d', 'trigger') //'there has been a change', etc...
+store.set('test.b.d', 'trigger') //'there has been a change...', etc...
 ```
 
 ### Contributing ###
