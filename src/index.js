@@ -57,6 +57,10 @@ module.exports = {
         this.afterSet(obj);
     },
 
+    extend(key, obj) {
+        this.set(key, _.extend(this.get(key), obj));
+    },
+
     touch(key) {
         const keys = key.split('.'),
             baseKey = keys.shift(),

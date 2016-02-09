@@ -67,6 +67,9 @@ module.exports = {
         localStorage.setItem(baseKey, this.beforeSet(obj));
         this.afterSet(obj);
     },
+    extend: function extend(key, obj) {
+        this.set(key, _.extend(this.get(key), obj));
+    },
     touch: function touch(key) {
         var keys = key.split('.'),
             baseKey = keys.shift(),
