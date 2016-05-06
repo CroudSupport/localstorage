@@ -8,17 +8,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/croudtech/localstorage.git"
+    "url": "git+ssh://github.com/CroudSupport/localstorage.git"
   },
   "keywords": [
     "local",
     "storage",
     "croud"
   ],
-  "private": true,
   "author": "Brock Reece",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/croudtech/localstorage#readme",
+  "homepage": "https://github.com/CroudSupport/localstorage#readme",
   "dependencies": {
     "underscore": "^1.8.3",
     "underscore.deep": "^0.5.1"
